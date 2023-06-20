@@ -1,11 +1,12 @@
 const express = require('express')
 const app = express()
-const port = process.env.PORT || 3000
+require('dotenv').config()
+const port = process.env.PORT
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const morgan = require('morgan')
 const { readdirSync } = require('fs')
-require('dotenv').config()
+console.log(process.env.PORT)
 const connectDB = require('./config/db')
 connectDB()
 
