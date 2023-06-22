@@ -34,7 +34,9 @@ router.get('/user/wishlist', auth, getWishList)
 
 router.put('/user/wishlist/:productId', auth, removeWishList)
 
-
+router.get('/test',(req,res) => {
+    res.send("Test 123")
+})
 
 
 module.exports = router

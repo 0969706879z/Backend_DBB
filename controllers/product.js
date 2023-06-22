@@ -1,10 +1,13 @@
 const Product = require('../models/Product')
+const { notifyEvent } = require('../function/notify')
+
 
 
 exports.create = async (req, res) => {
     try {
         const product = await new Product(req.body).save()
         res.send(product)
+        notifyEvent("Create Product : " + req.body + "Success")
     } catch (err) {
         res.status(500).send("Create Product Faild !!!")
     }
@@ -28,6 +31,8 @@ exports.remove = async (req, res) => {
             return res.status(404).send('Product not found');
         }
         res.send(deleted);
+        notifyEvent("Remove Product ID : " + req.params.id + "Success")
+
     } catch (err) {
         console.error(err);
         res.status(500).send('Remove Product Error');
@@ -48,7 +53,7 @@ exports.update = async (req, res) => {
     try {
         const product = await Product.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true }).exec()
         res.send(product)
-
+        notifyEvent("Update Product ID : " + req.params.id + "Success")
     } catch (err) {
         console.error(err);
         res.status(500).send('Update Product Error');

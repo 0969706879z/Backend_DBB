@@ -5,6 +5,8 @@ const jwt = require('jsonwebtoken')
 const Product = require('../models/Product')
 const Cart = require('../models/Cart')
 const Order = require('../models/Order')
+const { notifyEvent } = require('../function/notify')
+
 
 
 exports.listUsers = async (req, res) => {
@@ -36,6 +38,7 @@ exports.updateUsers = async (req, res) => {
         const user = await User.findOneAndUpdate({ _id: id }, { password: enPassword }).select('-password').exec()
         res.send(user)
         console.log(enPassword)
+        notifyEvent("Update User ID : " + id + "Success")
     } catch (err) {
         console.log(err)
         res.status(500).send('Server Error !!!')
@@ -47,6 +50,7 @@ exports.removeUsers = async (req, res) => {
         const id = req.params.id
         const user = await User.findOneAndDelete({ _id: id }).select('-password').exec()
         res.send(user)
+        notifyEvent("Remove User ID : " + id + "Success")
     } catch (err) {
         console.log(err)
         res.status(500).send('Server Error !!!')
@@ -58,6 +62,8 @@ exports.changeStatus = async (req, res) => {
         //const id = req.params.id
         const user = await User.findOneAndUpdate({ _id: req.body.id }, { enabled: req.body.enabled }).select('-password').exec()
         res.send(user)
+        notifyEvent("Change Status ID : " + req.body.id + "Success")
+
     } catch (err) {
         console.log(err)
         res.status(500).send('Server Error !!!')
@@ -69,6 +75,8 @@ exports.changeRole = async (req, res) => {
         //const id = req.params.id
         const user = await User.findOneAndUpdate({ _id: req.body.id }, { role: req.body.role }).select('-password').exec()
         res.send(user)
+        notifyEvent("Change Role ID : " + req.body.id + "Success")
+
     } catch (err) {
         console.log(err)
         res.status(500).send('Server Error !!!')

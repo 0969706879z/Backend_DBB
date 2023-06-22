@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs')
 const User = require('../models/User')
 const jwt = require('jsonwebtoken')
+const { notifyEvent } = require('../function/notify')
 
 exports.register = async (req, res) => {
     try {
@@ -17,6 +18,7 @@ exports.register = async (req, res) => {
         user.password = await bcrypt.hash(password, salt)
         await user.save()
         res.send("Register Success")
+        notifyEvent("Register Success Username : " + username)
     } catch (err) {
         console.log(err)
         res.status(500).send('Server Error !!!')
@@ -29,7 +31,6 @@ exports.login = async (req, res) => {
         var user = await User.findOneAndUpdate({ username }, { new: true })
         if (user && user.enabled) {
             const isMatch = await bcrypt.compare(password, user.password)
-
             if (!isMatch) {
                 return res.status(400).send("Password Invalid !!!")
             }
@@ -44,6 +45,7 @@ exports.login = async (req, res) => {
                 if (err) throw err;
                 res.json({ token, payload })
             })
+            notifyEvent("Login Success Username : " + username)
         } else {
             return res.status(400).send("User not Found !!!")
         }
